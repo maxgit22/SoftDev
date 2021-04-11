@@ -1,4 +1,6 @@
 const condition = document.getElementById('condition')
+const matchList =document.getElementById('match-list')
+// const loc = document.getElementById('loc')
 const city = document.getElementById('city')
 const country = document.getElementById('country')
 const mainText = document.getElementById('main')
@@ -11,11 +13,10 @@ const cityInput = document.getElementById('city-input')
 const historyElm = document.getElementById('history')
 const masterHistory = document.getElementById('master-history')
 
-const API_KEY = 'aaca7663770b1784ee5650f355ed4770'
+const API_KEY = '642e747c30b8be10a693bbac0ed1da01'
 const BASE_URL = `https://api.openweathermap.org/data/2.5/weather?appid=${API_KEY}`
 const ICON_URL = 'https://openweathermap.org/img/w/'
 const DEFAULT_CITY  = 'Mymensingh,bd'
-
 
 window.onload = function () {
     navigator.geolocation.getCurrentPosition(s => {
@@ -116,3 +117,40 @@ function updateHistory(history) {
         historyElm.appendChild(tempHistory)
     })
 }
+
+const searchCities =async searchText =>{
+    const res =await fetch('../data/cities.json');
+    const cities =await res.json();
+    
+
+
+    let matches=cities.filter(citys =>{
+        const regex = new RegExp(`^${searchText}`,'gi');
+        return citys.name.match(regex) || citys.country.match(regex);
+    });
+    if(searchText.length===0){
+        matches =[];
+        matchList.innerHTML = '';
+    }
+    outputHtml(matches);
+};
+const outputHtml =matches =>{
+    if(matches.length> 0){
+        const html =matches
+        .map(
+            match => `
+            <div class="card card-body mb-1 bg-warning">
+            <h4>${match.name}, ${match.country}</h4></div>`)
+            .join('');
+
+            matchList.innerHTML= html;
+
+        
+    }
+};
+cityInput.addEventListener('input',()=> searchCities(cityInput.value));
+
+
+
+
+  

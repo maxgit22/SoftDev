@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
 app.use('/api/history',require('./api/route'))
 
-const PORT = process.env.PORT || 4444
+const PORT = process.env.PORT || 5555
 
 app.listen(PORT, ()=>{
     console.log('APP is Running on PORT' + PORT)
